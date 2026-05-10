@@ -1,0 +1,29 @@
+# Compilados Java
+*.class
+*.jar
+*.war
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Maven
+target/
+
+# VS Code
+.vscode/
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Logs y backups generados
+*.log
+*.bak
+backups/
+logs/
+
+# Datos serializados generados en runtime (los de prueba sí se commitean)
+*.ser
+!datos_prueba.ser
