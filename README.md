@@ -4,9 +4,9 @@ Repositorio personal con las prácticas individuales y el proyecto integrador de
 
 ## Dominio elegido para el semestre
 
-A lo largo de las prácticas mantengo un **dominio coherente: gestión de un gimnasio**.
+A lo largo de las prácticas mantengo un dominio coherente: gestión de un gimnasio.
 Las clases construidas en cada práctica (Cliente, Membresía, ClaseGrupal, Pago, etc.)
-se reutilizan e integran en el proyecto final **GymPOS** (Práctica 12). Esto permite que
+se reutilizan e integran en el proyecto final GymPOS (Práctica 12). Esto permite que
 cada práctica aporte piezas concretas al sistema final en lugar de ser ejercicios aislados.
 
 La justificación detallada de esta decisión vive en cada `README.md` de cada práctica.
