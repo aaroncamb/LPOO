@@ -21,20 +21,20 @@ La justificación detallada de esta decisión vive en cada `README.md` de cada p
 
 ## Índice de prácticas
 
-| # | Tema | Estado |
-|---|------|--------|
-| 01 | Introducción a Java y configuración del entorno | ⏳ |
-| 02 | Clases y objetos | ⏳ |
-| 03 | Encapsulamiento y modificadores de acceso | ⏳ |
-| 04 | Herencia | ⏳ |
-| 05 | Polimorfismo | ⏳ |
-| 06 | Clases abstractas e interfaces | ⏳ |
-| 07 | Manejo de excepciones | ⏳ |
-| 08 | Colecciones | ⏳ |
-| 09 | Entrada/Salida (I/O) | ⏳ |
-| 10 | Programación concurrente | ⏳ |
-| 11 | JavaFX para interfaces gráficas | ⏳ |
-| 12 | Proyecto Integrador — GymPOS | ⏳ |
+| # | Tema |
+|---|------|
+| 01 | Introducción a Java y configuración del entorno |
+| 02 | Clases y objetos |
+| 03 | Encapsulamiento y modificadores de acceso |
+| 04 | Herencia |
+| 05 | Polimorfismo |
+| 06 | Clases abstractas e interfaces |
+| 07 | Manejo de excepciones |
+| 08 | Colecciones |
+| 09 | Entrada/Salida (I/O) |
+| 10 | Programación concurrente |
+| 11 | JavaFX para interfaces gráficas |
+| 12 | Proyecto Integrador — GymPOS |
 
 ## Estructura
 
