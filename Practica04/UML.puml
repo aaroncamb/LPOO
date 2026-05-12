@@ -1,0 +1,107 @@
+@startuml jerarquia-membresias
+
+' Diagrama UML de la jerarquia de membresias del gimnasio
+' Practica 4 - LPOO
+' Cesar Aaron Mendoza Benavides - 1904833
+
+' Configuracion visual
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+hide circle
+
+' --- Nivel 1: Clase raiz ---
+abstract class Membresia {
+  # titularNombre : String
+  # fechaInicio : LocalDate
+  # fechaFin : LocalDate
+  # activa : boolean
+  --
+  + Membresia(titular, fechaInicio)
+  + estaVigente() : boolean
+  + cancelar() : void
+  + {abstract} calcularPrecio() : double
+  + {abstract} beneficiosIncluidos() : String
+  + {abstract} renovar() : void
+  + {abstract} descuentoRenovacion() : double
+  + {abstract} tipoLegible() : String
+}
+
+' --- Nivel 2: Clase intermedia abstracta ---
+abstract class Estandar {
+  # precioMensual : double
+  --
+  + Estandar(titular, fechaInicio, precio)
+  + renovar() : void
+  + getPrecioMensual() : double
+}
+
+' --- Nivel 2: Clase concreta que hereda DIRECTO de Membresia ---
+class MembresiaVIP {
+  + {static} CUOTA_ANUAL : double = 14400.0
+  - entrenadorPersonalIncluido : boolean
+  - accesosSpaConsumidosEsteAnio : int
+  --
+  + calcularPrecio() : double
+  + beneficiosIncluidos() : String
+  + renovar() : void
+  + descuentoRenovacion() : double
+  + tipoLegible() : String
+  + registrarAccesoSpa() : void
+}
+
+' --- Nivel 3: Clases concretas ---
+class MembresiaBasica {
+  + {static} PRECIO_BASE : double = 350.0
+  --
+  + calcularPrecio() : double
+  + beneficiosIncluidos() : String
+  + descuentoRenovacion() : double
+  + tipoLegible() : String
+}
+
+class MembresiaPremium {
+  + {static} PRECIO_BASE : double = 650.0
+  - clasesGrupalesAgendadasEsteMes : int
+  --
+  + calcularPrecio() : double
+  + beneficiosIncluidos() : String
+  + descuentoRenovacion() : double
+  + tipoLegible() : String
+  + agendarClaseGrupal() : void
+}
+
+' --- Clase contenedora ---
+class GestorMembresias {
+  - membresias : List<Membresia>
+  --
+  + agregar(Membresia) : void
+  + ingresosEsperados() : double
+  + renovarTodas() : void
+  + filtrarPorTipo(Class) : List<Membresia>
+  + buscarPorTitular(String) : Optional<Membresia>
+}
+
+' --- Relaciones ---
+Membresia <|-- Estandar
+Membresia <|-- MembresiaVIP
+Estandar  <|-- MembresiaBasica
+Estandar  <|-- MembresiaPremium
+
+GestorMembresias o-- Membresia : agrupa
+
+' --- Notas ---
+note right of MembresiaVIP
+  Hereda DIRECTO de Membresia,
+  no de Estandar, porque su
+  modelo es anual (no mensual).
+  Forzarla a Estandar implicaria
+  un precioMensual ficticio.
+end note
+
+note bottom of Membresia
+  Define el contrato comun:
+  estar vigente, cancelar, cobrar.
+  No sabe si es mensual o anual.
+end note
+
+@enduml
