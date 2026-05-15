@@ -96,20 +96,6 @@ public class ClienteFormulario {
         botonGuardar = BotonAccion.primario(esEdicion ? "Actualizar" : "Guardar");
         botonCancelar = BotonAccion.secundario("Cancelar");
 
-        botonGuardar.setOnAction(e -> intentarGuardar());
-        botonCancelar.setOnAction(e -> {
-            resultado = null;
-            stage.close();
-        });
-
-        // -------- Listeners de validacion en tiempo real --------
-        Runnable revalidar = this::actualizarBotonGuardar;
-        campoId.textProperty().addListener((o, v, n) -> revalidar.run());
-        campoNombre.textProperty().addListener((o, v, n) -> revalidar.run());
-        campoEmail.textProperty().addListener((o, v, n) -> revalidar.run());
-        campoPeso.textProperty().addListener((o, v, n) -> revalidar.run());
-        revalidar.run();
-
         // -------- Layout --------
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -134,6 +120,23 @@ public class ClienteFormulario {
         scene.getStylesheets().add(
                 getClass().getResource("/styles.css").toExternalForm());
 
+        // -------- Stage creado ANTES de los listeners que lo referencian
+        // (de otro modo el compilador no puede garantizar que stage este
+        // inicializado en los lambdas) --------
+        stage = new Stage();
+        stage.setTitle(esEdicion ? "Editar cliente" : "Nuevo cliente");
+        stage.setScene(scene);
+        stage.initOwner(padre);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.setResizable(false);
+
+        // -------- Listeners (ahora si: stage existe) --------
+        botonGuardar.setOnAction(e -> intentarGuardar());
+        botonCancelar.setOnAction(e -> {
+            resultado = null;
+            stage.close();
+        });
+
         // Atajo de teclado: Enter para guardar, Escape para cancelar.
         scene.setOnKeyPressed(ev -> {
             if (ev.getCode() == KeyCode.ENTER && !botonGuardar.isDisabled()) {
@@ -144,12 +147,13 @@ public class ClienteFormulario {
             }
         });
 
-        stage = new Stage();
-        stage.setTitle(esEdicion ? "Editar cliente" : "Nuevo cliente");
-        stage.setScene(scene);
-        stage.initOwner(padre);
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.setResizable(false);
+        // -------- Listeners de validacion en tiempo real --------
+        Runnable revalidar = this::actualizarBotonGuardar;
+        campoId.textProperty().addListener((o, v, n) -> revalidar.run());
+        campoNombre.textProperty().addListener((o, v, n) -> revalidar.run());
+        campoEmail.textProperty().addListener((o, v, n) -> revalidar.run());
+        campoPeso.textProperty().addListener((o, v, n) -> revalidar.run());
+        revalidar.run();
     }
 
     /**
