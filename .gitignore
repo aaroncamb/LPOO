@@ -27,3 +27,10 @@ logs/
 # Datos serializados generados en runtime (los de prueba sí se commitean)
 *.ser
 !datos_prueba.ser
+
+# GymPOS - datos transitorios
+GymPOS/data/*.dat
+GymPOS/data/*.log
+GymPOS/data/backups/
+GymPOS/data/reportes/
+GymPOS/target/
