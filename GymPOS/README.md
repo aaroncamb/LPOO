@@ -47,7 +47,6 @@ Este proyecto tiene documentación extensa en la carpeta `docs/`:
 | [MANUAL_TECNICO.md](docs/MANUAL_TECNICO.md) | Arquitectura, decisiones de diseño, 6 diagramas UML, dependencias, limitaciones |
 | [MANUAL_USUARIO.md](docs/MANUAL_USUARIO.md) | Guía paso a paso de cada pestaña con capturas |
 | [CASOS_DE_USO.md](docs/CASOS_DE_USO.md) | 7 casos de uso formales con flujos principales y alternativos |
-| [VIDEO_SCRIPT.md](docs/VIDEO_SCRIPT.md) | Guion del video de presentación de 5-8 minutos |
 | [BITACORA_IA.md](docs/BITACORA_IA.md) | Registro del uso de IA como apoyo durante el desarrollo |
 | `diagramas/*.puml` | Diagramas UML en PlantUML (arquitectura, jerarquías, secuencias) |
 
@@ -95,7 +94,6 @@ GymPOS/
 | Manual técnico 10-15 pág con UML | `docs/MANUAL_TECNICO.md` + 6 diagramas PlantUML |
 | Manual de usuario con casos de uso | `docs/MANUAL_USUARIO.md` + `docs/CASOS_DE_USO.md` |
 | Archivo de configuración | `config.properties` con 14 parámetros |
-| Video 5-8 minutos | Script en `docs/VIDEO_SCRIPT.md` |
 | Bitácora de IA | `docs/BITACORA_IA.md` con intercambios documentados |
 
 ---
