@@ -1,0 +1,61 @@
+@startuml secuencia-reporte-background
+title GymPOS - Generacion de reporte en hilo de fondo
+
+actor Usuario
+participant "ReportesController" as RC
+participant "TareaReporte\n(Task)" as TR
+participant "Thread\n(hilo fondo)" as TH
+participant "GeneradorReportes" as GR
+participant "GestorArchivos" as GA
+participant "ProgressBar\n(UI - FXAT)" as PB
+participant "TextArea\n(UI - FXAT)" as TA
+
+Usuario -> RC : click "Reporte general"
+activate RC
+
+RC -> TR : new TareaReporte(GENERAL)
+activate TR
+
+RC -> PB : progressProperty().bind(tarea.progressProperty())
+RC -> RC : tarea.setOnSucceeded(...)
+RC -> RC : tarea.setOnFailed(...)
+
+RC -> TH : new Thread(tarea).start()
+activate TH
+
+note over RC
+  La UI sigue
+  RESPONDIENDO
+end note
+
+TH -> TR : ejecuta call()
+TR -> TR : updateProgress(0, 100)
+TR --> PB : barra se actualiza (thread-safe)
+
+TR -> GR : generarReporteGeneral()
+activate GR
+GR -> GR : recolectar datos
+GR -> GR : formatear (StringBuilder)
+GR -> GA : escribirTexto(ruta, contenido)
+GA --> GR
+GR --> TR : ruta del archivo
+deactivate GR
+
+TR -> TR : updateProgress(100, 100)
+
+deactivate TH
+
+TR --> RC : Platform.runLater(setOnSucceeded)
+note right
+  Ejecuta de vuelta
+  en el FXAT
+end note
+
+RC -> TA : setText(contenido leido)
+RC -> PB : setProgress(1.0)
+RC --> Usuario : reporte listo + vista previa
+
+deactivate TR
+deactivate RC
+
+@enduml

@@ -1,0 +1,54 @@
+@startuml secuencia-cobro
+title GymPOS - Flujo de cobro de membresia
+
+actor Recepcionista
+participant "MembresiasController" as MC
+participant "DialogoCobro" as DC
+participant "ProcesadorPagos" as PP
+participant "PagoRechazadoException" as PRE
+participant "Cliente" as C
+participant "SistemaMembresias" as SM
+participant "Loggers" as L
+
+Recepcionista -> MC : doble-click en membresia
+activate MC
+
+MC -> DC : new DialogoCobro(cliente, membresia)
+activate DC
+DC --> MC : muestra dialogo modal
+
+Recepcionista -> DC : ajusta slider descuento
+DC -> DC : actualizarDesglose()
+
+Recepcionista -> DC : click "Cobrar"
+
+DC -> PP : cobrarMembresia(cliente, membresia, descuento, metodo)
+activate PP
+
+PP -> PP : calcular subtotal/IVA/total
+PP -> PP : intentarCobro() [90% exito]
+
+alt cobro exitoso
+    PP -> PP : crear Ticket
+    PP -> C : agregarPuntos(monto * 1)
+    PP -> L : info("Pago OK")
+    PP --> DC : Ticket
+    DC --> MC : Optional<Ticket>
+    MC -> SM : renovar(idCliente)
+    MC -> C : agregarPuntos(50)  // bonus
+else cobro rechazado
+    PP -> PRE : new PagoRechazadoException(...)
+    PP -> L : logExcepcion(ex)
+    PP --> DC : throws PagoRechazadoException
+    DC -> DC : Alert con contexto rico
+    note right
+      Muestra: codigo, monto,
+      metodo, referencia
+    end note
+end
+
+deactivate PP
+deactivate DC
+deactivate MC
+
+@enduml

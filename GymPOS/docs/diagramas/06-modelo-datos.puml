@@ -1,0 +1,86 @@
+@startuml modelo-datos
+title GymPOS - Modelo de datos
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+class Cliente {
+    - id : IntegerProperty
+    - nombreCompleto : StringProperty
+    - email : StringProperty
+    - fechaRegistro : ObjectProperty<LocalDate>
+    - pesoKg : DoubleProperty
+    - tipoMembresia : ObjectProperty<TipoMembresia>
+    - activo : BooleanProperty
+    - puntos : IntegerProperty
+    --
+    + agregarPuntos(int) : void
+    + canjearPuntos(int) : boolean
+    --
+    Notas:
+    - Property: bindings JavaFX
+    - Serializable con writeObject/readObject
+      personalizados (las Property no son
+      Serializable por defecto)
+}
+
+enum TipoMembresia {
+    BASICA
+    PREMIUM
+    VIP
+}
+
+class Membresia <<abstract>> {
+    idMembresia, idCliente, fechaInicio,
+    fechaVencimiento, precioMensual, activa
+}
+
+class ClaseGrupal {
+    - idClase : int
+    - nombre : String
+    - instructor : String
+    - horario : LocalDateTime
+    - cupoMaximo : int
+    - precio : double
+    - inscritosIds : HashSet<Integer>
+    --
+    + inscribir(idCliente) [throws CupoExcedido]
+    + cancelarInscripcion(idCliente)
+    + lugaresDisponibles() : int
+}
+
+class Equipo {
+    - idEquipo : int
+    - nombre : String
+    - categoria : String
+    - fechaAdquisicion : LocalDate
+    - estado : Estado
+}
+
+enum Estado {
+    OPERATIVO
+    EN_REPARACION
+    FUERA_DE_SERVICIO
+}
+
+class RegistroAcceso <<inmutable>> {
+    - idRegistro : int (final)
+    - idCliente : int (final)
+    - momento : LocalDateTime (final)
+    - tipo : TipoMovimiento (final)
+    - numeroTorniquete : String (final)
+}
+
+enum TipoMovimiento {
+    ENTRADA
+    SALIDA
+}
+
+Cliente .. TipoMembresia : tipo
+Cliente "1" --> "0..*" Membresia : tiene historial
+Cliente "1" --> "0..*" RegistroAcceso : genera
+ClaseGrupal "1" o--> "0..*" Cliente : inscribe (por id)
+Equipo .. Estado
+RegistroAcceso .. TipoMovimiento
+
+@enduml

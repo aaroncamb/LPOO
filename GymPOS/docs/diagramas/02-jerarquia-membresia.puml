@@ -1,0 +1,64 @@
+@startuml jerarquia-membresia
+title GymPOS - Jerarquia de Membresia
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+abstract class Membresia {
+    # idMembresia : int
+    # idCliente : int
+    # fechaInicio : LocalDate
+    # fechaVencimiento : LocalDate
+    # precioMensual : double
+    # activa : boolean
+    --
+    + estaVigente() : boolean
+    + diasParaVencer() : long
+    + renovar() : void
+    + costoPeriodo() : double
+    --
+    {abstract} + nombrePlan() : String
+    {abstract} + duracionMeses() : int
+    {abstract} + incluyeClasesGrupales() : boolean
+    {abstract} + incluyeEntrenadorPersonal() : boolean
+    {abstract} + descripcion() : String
+}
+
+class MembresiaBasica {
+    + nombrePlan() : "BASICA"
+    + duracionMeses() : 1
+    + incluyeClasesGrupales() : false
+    + incluyeEntrenadorPersonal() : false
+}
+
+class MembresiaPremium {
+    + nombrePlan() : "PREMIUM"
+    + duracionMeses() : 1
+    + incluyeClasesGrupales() : true
+    + incluyeEntrenadorPersonal() : false
+}
+
+class MembresiaVIP {
+    + nombrePlan() : "VIP"
+    + duracionMeses() : 12
+    + incluyeClasesGrupales() : true
+    + incluyeEntrenadorPersonal() : true
+    --
+    Nota: recibe precio ANUAL,
+    lo prorratea a mensual
+}
+
+Membresia <|-- MembresiaBasica
+Membresia <|-- MembresiaPremium
+Membresia <|-- MembresiaVIP
+
+note right of Membresia
+  Serializable.
+  El constructor llama a
+  calcularFechaVencimiento()
+  que usa duracionMeses()
+  (polimorfismo dispatching
+  durante construccion).
+end note
+
+@enduml

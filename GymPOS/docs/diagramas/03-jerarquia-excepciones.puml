@@ -1,0 +1,67 @@
+@startuml jerarquia-excepciones
+title GymPOS - Jerarquia de Excepciones
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+class Exception <<java.lang>>
+class RuntimeException <<java.lang>>
+
+Exception <|-- RuntimeException
+
+abstract class GymException {
+    - timestamp : LocalDateTime
+    + getTimestamp() : LocalDateTime
+    {abstract} + categoria() : String
+}
+
+class PagoRechazadoException {
+    - montoIntentado : double
+    - metodoPago : String
+    - codigoErrorInterno : String
+    - referenciaTransaccion : String
+    --
+    + getMontoIntentado() : double
+    + getReferenciaTransaccion() : String
+    + toString() : String
+    Nota: emite JSON con contexto
+}
+
+class CupoExcedidoException {
+    - nombreClase : String
+    - cupoMaximo : int
+    - inscritosActuales : int
+}
+
+class MembresiaVencidaException {
+    - clienteNombre : String
+    - fechaVencimiento : LocalDate
+    - diasDeVencida : long
+}
+
+class EntradaInvalidaException {
+    - campo : String
+    - valorRecibido : Object
+}
+
+Exception <|-- GymException : checked
+GymException <|-- PagoRechazadoException
+GymException <|-- CupoExcedidoException
+GymException <|-- MembresiaVencidaException
+
+RuntimeException <|-- EntradaInvalidaException : unchecked
+
+note bottom of GymException
+  CHECKED: el compilador exige try/catch.
+  Representan errores del mundo externo
+  (banco rechazo, clase llena, etc).
+end note
+
+note bottom of EntradaInvalidaException
+  UNCHECKED: representa BUG del
+  programador (id negativo, null, etc).
+  No tiene sentido try/catch un bug;
+  hay que arreglar el codigo.
+end note
+
+@enduml

@@ -1,0 +1,96 @@
+@startuml arquitectura-general
+title GymPOS - Arquitectura por paquetes
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam roundCorner 5
+
+package "com.gympos" {
+    class App #lightblue
+}
+
+package "controller" {
+    class AppContext
+    class MainController
+    class ClientesController
+    class MembresiasController
+    class ClasesController
+    class ReportesController
+}
+
+package "view" {
+    class BotonAccion
+    class CampoEmail
+    class DialogoCobro
+}
+
+package "service" {
+    class GestionClientes
+    class SistemaMembresias
+    class ProcesadorPagos
+    class ControlAcceso
+    class GeneradorReportes
+    class DatosPrueba
+}
+
+package "model" {
+    class Cliente
+    abstract class Membresia
+    class MembresiaBasica
+    class MembresiaPremium
+    class MembresiaVIP
+    class ClaseGrupal
+    class Equipo
+    class RegistroAcceso
+}
+
+package "exceptions" {
+    abstract class GymException
+    class PagoRechazadoException
+    class CupoExcedidoException
+    class MembresiaVencidaException
+    class EntradaInvalidaException
+}
+
+package "persistence" {
+    class GestorArchivos
+    class BackupManager
+    class ConfigManager
+}
+
+package "concurrency" {
+    class TareaReporte
+    class TareaBackup
+}
+
+package "util" {
+    class Loggers
+}
+
+App ..> AppContext : usa
+App ..> MainController : crea
+MainController --> ClientesController : compone
+MainController --> MembresiasController : compone
+MainController --> ClasesController : compone
+MainController --> ReportesController : compone
+
+ClientesController ..> view : usa
+MembresiasController ..> view : usa
+MembresiasController ..> DialogoCobro : usa
+
+AppContext --> service : crea instancias
+AppContext --> persistence : crea instancias
+
+service --> model : opera sobre
+service --> exceptions : lanza
+service --> persistence : guarda/carga
+
+persistence --> Loggers : registra
+exceptions --> Loggers : registran
+
+ReportesController --> TareaReporte : lanza
+MainController --> TareaBackup : lanza
+TareaReporte --> GeneradorReportes : ejecuta
+TareaBackup --> BackupManager : ejecuta
+
+@enduml
