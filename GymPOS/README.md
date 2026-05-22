@@ -13,6 +13,14 @@ GymPOS es una aplicación de escritorio JavaFX para administrar un gimnasio: cli
 
 ---
 
+## 🎥 Video de presentación
+
+**[Ver demo de GymPOS en YouTube](https://www.youtube.com/watch?v=r1qzx_M5C-I)** *(5:48 min)*
+
+Recorrido completo por el sistema: arquitectura, módulo Clientes, cobro de membresías con desglose en vivo, calendario de clases grupales, generación de reportes con multithreading, etc.
+
+---
+
 ## Ejecutar la aplicación
 
 ### Opción A: Desde IntelliJ IDEA
